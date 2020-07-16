@@ -39,24 +39,69 @@ class Board
     6 - @board[col-1].count("*")
   end
 
-  def add_test_marker
-    @board[0][0] = "O"
-    @board[0][1] = "O"
-    @board[4][1] = "X"
-  end
-
   def is_valid_col?(col)
     # returns false if column is full, true otherwise
     @board[col-1].include?("*")
   end
 
+  def board_full?
+    # returns true if there are still open columns, false if board is full
+    @board.flatten.any?("*") ? false : true
+  end
+
+  def win?
+    return true if win_horiz?
+    return true if win_vert?
+    return true if win_diag_up?
+    return true if win_diag_down?
+  end
+
+  def win_horiz?
+    (0..5).each do |col|
+      (0..3).each do |row|
+        return true if (@board[row][col] == @board[row+1][col]) &&
+                       (@board[row][col] == @board[row+2][col]) &&
+                       (@board[row][col] == @board[row+3][col]) &&
+                       (@board[row][col] != "*")
+      end
+    end
+    false
+  end
+
+  def win_vert?
+    (0..6).each do |row|
+      (0..2).each do |col|
+        return true if (@board[row][col] == @board[row][col+1]) &&
+                       (@board[row][col] == @board[row][col+2]) &&
+                       (@board[row][col] == @board[row][col+3]) &&
+                       (@board[row][col] != "*")
+      end
+    end
+    false
+  end
+
+  def win_diag_up?
+    (0..3).each do |row|
+      (0..2).each do |col|
+        return true if (@board[row][col] == @board[row+1][col+1]) &&
+                       (@board[row][col] == @board[row+2][col+2]) &&
+                       (@board[row][col] == @board[row+3][col+3]) &&
+                       (@board[row][col] != "*")
+      end
+    end
+    false
+  end
+
+  def win_diag_down?
+    (0..3).each do |row|
+      (3..5).each do |col|
+        return true if (@board[row][col] == @board[row+1][col-1]) &&
+                       (@board[row][col] == @board[row+2][col-2]) &&
+                       (@board[row][col] == @board[row+3][col-3]) &&
+                       (@board[row][col] != "*")
+      end
+    end
+    false
+  end
 
 end
-
-board = Board.new 
-board.add_test_marker
-board.add_marker(1, "O")
-board.print_board
-
-puts board.is_valid_col?(1)
-puts board.get_col_height(1)

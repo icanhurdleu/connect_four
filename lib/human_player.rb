@@ -25,6 +25,3 @@ class HumanPlayer
   end
 
 end
-
-p = HumanPlayer.new("Sam", "O")
-puts p.get_move
